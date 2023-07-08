@@ -1,4 +1,5 @@
-package main
+// Package tree is a package for work with trees.
+package tree
 
 import (
 	"golang.org/x/exp/constraints"
@@ -11,16 +12,19 @@ const (
 	Asc direction = "asc"
 )
 
-// direction is a type which uses to set the sort direction.
+// direction is a type which uses to set the direction (Asc or Desc).
 type direction string
 
-type tree[V constraints.Ordered] struct {
+// Tree is the structure of tree. You can use any ordered type for type of tree's values
+type Tree[V constraints.Ordered] struct {
 	value V
-	left  *tree[V]
-	right *tree[V]
+	left  *Tree[V]
+	right *Tree[V]
 }
 
-func (t *tree[V]) InOrderTreeWalk(d direction) []V {
+// InOrderTreeWalk is a function when you can make Tree traversal.
+//   - param should be `type direction` (`direction.Asc` or `direction.Desc`)
+func (t *Tree[V]) InOrderTreeWalk(d direction) []V {
 	if t == nil {
 		return nil
 	}
@@ -47,7 +51,9 @@ func (t *tree[V]) InOrderTreeWalk(d direction) []V {
 	return output
 }
 
-func (t *tree[V]) Search(val V) *tree[V] {
+// Search is a function for searching element in tree.
+//   - param should be `ordered type` (`int`, `string`, `float` etc)
+func (t *Tree[V]) Search(val V) *Tree[V] {
 	for t != nil && val != t.value {
 		if val < t.value {
 			t = t.left
@@ -59,7 +65,8 @@ func (t *tree[V]) Search(val V) *tree[V] {
 	return t
 }
 
-func (t *tree[V]) Min() *tree[V] {
+// Min is a function for searching min element in tree.
+func (t *Tree[V]) Min() *Tree[V] {
 	for t.left != nil {
 		t = t.left
 	}
@@ -67,7 +74,8 @@ func (t *tree[V]) Min() *tree[V] {
 	return t
 }
 
-func (t *tree[V]) Max() *tree[V] {
+// Max is a function for searching max element in tree.
+func (t *Tree[V]) Max() *Tree[V] {
 	for t.right != nil {
 		t = t.right
 	}
@@ -75,12 +83,14 @@ func (t *tree[V]) Max() *tree[V] {
 	return t
 }
 
-func (t *tree[V]) preOrderSuccessor(el *tree[V]) *tree[V] {
+// PreOrderSuccessor is a function for searching preOrder element for income element of tree
+//   - param should be `type Tree`
+func (t *Tree[V]) PreOrderSuccessor(el *Tree[V]) *Tree[V] {
 	if el.left != nil {
 		return el.left.Max()
 	}
 
-	var r tree[V]
+	var r Tree[V]
 	for t != nil {
 		if t.value > el.value {
 			t = t.left
@@ -94,12 +104,14 @@ func (t *tree[V]) preOrderSuccessor(el *tree[V]) *tree[V] {
 	return &r
 }
 
-func (t *tree[V]) postOrderSuccessor(el *tree[V]) *tree[V] {
+// PostOrderSuccessor is a function for searching postOrder element for income element of tree
+//   - param should be `type Tree`
+func (t *Tree[V]) PostOrderSuccessor(el *Tree[V]) *Tree[V] {
 	if el.right != nil {
 		return el.right.Min()
 	}
 
-	var r tree[V]
+	var r Tree[V]
 	for t != nil {
 		if t.value < el.value {
 			t = t.right
@@ -113,8 +125,10 @@ func (t *tree[V]) postOrderSuccessor(el *tree[V]) *tree[V] {
 	return &r
 }
 
-func (t *tree[V]) Insert(val V) {
-	elem := tree[V]{
+// Insert is a function for inserting element into tree
+//   - param should be `ordered type` (`int`, `string`, `float` etc)
+func (t *Tree[V]) Insert(val V) {
+	elem := Tree[V]{
 		value: val,
 	}
 	if elem.value < t.value {

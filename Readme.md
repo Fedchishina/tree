@@ -3,39 +3,38 @@ Tree
 
 Library for work with trees.
 
-You can create a tree and use a list of functions to work with it.
+You can create a Tree and use a list of functions to work with it.
 
-- [Tree](#tree)
-    * [Tree functions](#tree-functions)
-        + [1. Tree creation example](#1-tree-creation-example)
-        + [2. Tree traversal](#2-tree-traversal)
-        + [3. Search element](#3-search-element)
-        + [4. Min tree element](#4-min-tree-element)
-        + [5. Max tree element](#5-max-tree-element)
-        + [6. PreOrder Successor](#6-preorder-successor)
-        + [7. PostOrder Successor](#7-postorder-successor)
+- [Tree functions](#Tree-functions)
+    * [Tree creation example](#1-Tree-creation-example)
+    * [Tree traversal](#2-Tree-traversal)
+    * [Search element](#3-search-element)
+    * [Min Tree element](#4-min-Tree-element)
+    * [Max Tree element](#5-max-Tree-element)
+    * [PreOrder Successor](#6-preorder-successor)
+    * [PostOrder Successor](#7-postorder-successor)
 
 ## Tree functions
-### 1. Tree creation example
+### Tree creation example
 
 ```
-intTree := tree[int]{
+intTree := Tree[int]{
     value: 20,
     left:  nil,
     right: nil,
 }
 
-stringTree := tree[string]{
+stringTree := Tree[string]{
     value: "root value",
     left:  nil,
     right: nil,
 }
 ```
 
-### 2. Tree traversal
-you can make tree traversal:
+### Tree traversal
+you can make Tree traversal:
 ```
-t := tree[int]{
+t := Tree[int]{
     value: 20,
     left:  nil,
     right: nil,
@@ -48,10 +47,10 @@ resultAsc := t.InOrderTreeWalk(Asc)   // [4 8 20 22]
 resultDesc := t.InOrderTreeWalk(Desc) // [22 20 8 4]
 ```
 
-### 3. Search element
+### Search element
 
 ```
-t := tree[int]{
+t := Tree[int]{
     value: 20,
     left:  nil,
     right: nil,
@@ -64,12 +63,12 @@ t.Insert(10)
 t.Insert(14)
 
 resultNil := t.Search(15) //nil
-result := t.Search(12)    // tree with root 12
+result := t.Search(12)    // Tree with root 12
 ```
 
-### 4. Min tree element
+### Min Tree element
 ```
-t := tree[int]{
+t := Tree[int]{
     value: 20,
     left:  nil,
     right: nil,
@@ -81,11 +80,11 @@ t.Insert(12)
 t.Insert(10)
 t.Insert(14)
 
-result := t.Min() // tree with root 4
+result := t.Min() // Tree with root 4
 ```
-### 5. Max tree element
+### Max Tree element
 ```
-t := tree[int]{
+t := Tree[int]{
     value: 20,
     left:  nil,
     right: nil,
@@ -97,12 +96,12 @@ t.Insert(12)
 t.Insert(10)
 t.Insert(14)
 
-result := t.Max() // tree with root 22
+result := t.Max() // Tree with root 22
 ```
 
-### 6. PreOrder Successor
+### PreOrder Successor
 ```
-t := tree[int]{
+t := Tree[int]{
     value: 20,
     left:  nil,
     right: nil,
@@ -114,12 +113,12 @@ t.Insert(12)
 t.Insert(10)
 t.Insert(14)
 
-result := t.preOrderSuccessor(t.left) // tree with root 4
+result := t.PreOrderSuccessor(t.left) // Tree with root 4
 ```
 
-### 7. PostOrder Successor
+### PostOrder Successor
 ```
-t := tree[int]{
+t := Tree[int]{
     value: 20,
     left:  nil,
     right: nil,
@@ -131,5 +130,5 @@ t.Insert(12)
 t.Insert(10)
 t.Insert(14)
 
-result := t.postOrderSuccessor(t.left) // tree with root 10
+result := t.PostOrderSuccessor(t.left) // Tree with root 10
 ```
