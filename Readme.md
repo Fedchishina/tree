@@ -6,13 +6,13 @@ Library for work with trees.
 You can create a Tree and use a list of functions to work with it.
 
 - [Tree functions](#Tree-functions)
-    * [Tree creation example](#1-Tree-creation-example)
-    * [Tree traversal](#2-Tree-traversal)
-    * [Search element](#3-search-element)
-    * [Min Tree element](#4-min-Tree-element)
-    * [Max Tree element](#5-max-Tree-element)
-    * [PreOrder Successor](#6-preorder-successor)
-    * [PostOrder Successor](#7-postorder-successor)
+    * [Tree creation example](#Tree-creation-example)
+    * [Tree traversal](#Tree-traversal)
+    * [Search element](#search-element)
+    * [Min Tree element](#min-Tree-element)
+    * [Max Tree element](#max-Tree-element)
+    * [PreOrder Successor](#preorder-successor)
+    * [PostOrder Successor](#postorder-successor)
 
 ## Tree functions
 ### Tree creation example
