@@ -22,6 +22,16 @@ type Tree[V constraints.Ordered] struct {
 	right *Tree[V]
 }
 
+// CreateNode is a function for creation tree with one element
+// - param should be `ordered type` (`int`, `string`, `float` etc)
+func CreateNode[V constraints.Ordered](val V) *Tree[V] {
+	return &Tree[V]{
+		value: val,
+		left:  nil,
+		right: nil,
+	}
+}
+
 // InOrderTreeWalk is a function when you can make Tree traversal.
 //   - param should be `type direction` (`direction.Asc` or `direction.Desc`)
 func (t *Tree[V]) InOrderTreeWalk(d direction) []V {

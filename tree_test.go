@@ -334,3 +334,37 @@ func Test_tree_Insert(t1 *testing.T) {
 		})
 	}
 }
+
+func TestCreateNode(t *testing.T) {
+	type args[V constraints.Ordered] struct {
+		val V
+	}
+
+	type testCase[V constraints.Ordered] struct {
+		name string
+		args args[V]
+		want *Tree[V]
+	}
+
+	testInt := testCase[int]{
+		name: "int node",
+		args: args[int]{val: 10},
+		want: &Tree[int]{value: 10},
+	}
+	t.Run(testInt.name, func(t *testing.T) {
+		if got := CreateNode(testInt.args.val); !reflect.DeepEqual(got, testInt.want) {
+			t.Errorf("CreateNode() = %v, want %v", got, testInt.want)
+		}
+	})
+
+	testString := testCase[string]{
+		name: "string node",
+		args: args[string]{val: "test"},
+		want: &Tree[string]{value: "test"},
+	}
+	t.Run(testString.name, func(t *testing.T) {
+		if got := CreateNode(testString.args.val); !reflect.DeepEqual(got, testString.want) {
+			t.Errorf("CreateNode() = %v, want %v", got, testString.want)
+		}
+	})
+}

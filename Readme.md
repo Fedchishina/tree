@@ -29,6 +29,8 @@ stringTree := Tree[string]{
     left:  nil,
     right: nil,
 }
+
+t := tree.CreateNode(15)
 ```
 
 ### Tree traversal
