@@ -3,28 +3,28 @@ tree
 
 Library for work with Binary trees.
 
-You can create a Binary tree and use a list of functions to work with it.
-
-- [tree functions](#tree-functions)
-    * [tree creation example](#tree-creation-example)
-    * [tree traversal](#tree-traversal)
-    * [Search element](#search-element)
-    * [Min tree element](#min-tree-element)
-    * [Max tree element](#max-tree-element)
-    * [PreOrder Successor](#preorder-successor)
-    * [PostOrder Successor](#postorder-successor)
-    * [Find parent](#find-parent)
-    * [Delete node from tree](#delete-node-from-tree)
+You can create a Binary tree and use a list of functions to work with it. 
 
 ## tree functions
-### tree creation example
+  - [Tree creation example](#tree-creation-example)
+  - [Tree traversal](#tree-traversal)
+  - [Search element](#search-element)
+  - [Min tree element](#min-tree-element)
+  - [Max tree element](#max-tree-element)
+  - [PreOrder Successor](#preorder-successor)
+  - [PostOrder Successor](#postorder-successor)
+  - [Find parent](#find-parent)
+  - [Delete node from tree](#delete-node-from-tree)
+
+
+### Tree creation example
 
 ```
 t := tree.CreateNode[int](15) //int node
 t := tree.CreateNode[string]("abc") //string node
 ```
 
-### tree traversal
+### Tree traversal
 you can make tree traversal:
 ```
 t := tree.CreateNode[int](20)
