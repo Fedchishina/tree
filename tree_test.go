@@ -13,7 +13,7 @@ func Test_tree_InOrderTreeWalk(t1 *testing.T) {
 	}
 	type testCase[V constraints.Ordered] struct {
 		name string
-		t    Tree[V]
+		t    tree[V]
 		args args
 		want []V
 	}
@@ -21,32 +21,32 @@ func Test_tree_InOrderTreeWalk(t1 *testing.T) {
 	intTests := []testCase[int]{
 		{
 			name: "empty",
-			t:    Tree[int]{},
+			t:    tree[int]{},
 			args: args{d: Asc},
 			want: []int{0},
 		},
 		{
 			name: "one element",
-			t:    Tree[int]{value: 5},
+			t:    tree[int]{value: 5},
 			args: args{d: Asc},
 			want: []int{5},
 		},
 		{
 			name: "ascending",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 			args: args{d: Asc},
 			want: []int{1, 5, 10},
 		},
 		{
 			name: "descending",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 			args: args{d: Desc},
 			want: []int{10, 5, 1},
@@ -67,64 +67,64 @@ func Test_tree_Search(t1 *testing.T) {
 	}
 	type testCase[V constraints.Ordered] struct {
 		name string
-		t    Tree[V]
+		t    tree[V]
 		args args[V]
-		want *Tree[V]
+		want *tree[V]
 	}
 
 	intTests := []testCase[int]{
 		{
 			name: "empty",
-			t:    Tree[int]{},
+			t:    tree[int]{},
 			args: args[int]{val: 0},
-			want: &Tree[int]{value: 0},
+			want: &tree[int]{value: 0},
 		},
 		{
 			name: "not found",
-			t:    Tree[int]{},
+			t:    tree[int]{},
 			args: args[int]{val: 10},
 			want: nil,
 		},
 		{
 			name: "found left",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 			args: args[int]{val: 1},
-			want: &Tree[int]{value: 1},
+			want: &tree[int]{value: 1},
 		},
 		{
 			name: "found right",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 			args: args[int]{val: 10},
-			want: &Tree[int]{value: 10},
+			want: &tree[int]{value: 10},
 		},
 		{
 			name: "found root",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 			args: args[int]{val: 5},
-			want: &Tree[int]{
+			want: &tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 		},
 		{
 			name: "not found",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 			args: args[int]{val: 8},
 			want: nil,
@@ -142,29 +142,29 @@ func Test_tree_Search(t1 *testing.T) {
 func Test_tree_Min(t1 *testing.T) {
 	type testCase[V constraints.Ordered] struct {
 		name string
-		t    Tree[V]
-		want *Tree[V]
+		t    tree[V]
+		want *tree[V]
 	}
 
 	intTests := []testCase[int]{
 		{
 			name: "empty",
-			t:    Tree[int]{},
-			want: &Tree[int]{value: 0},
+			t:    tree[int]{},
+			want: &tree[int]{value: 0},
 		},
 		{
 			name: "one element",
-			t:    Tree[int]{value: 15},
-			want: &Tree[int]{value: 15},
+			t:    tree[int]{value: 15},
+			want: &tree[int]{value: 15},
 		},
 		{
 			name: "found min",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
-			want: &Tree[int]{value: 1},
+			want: &tree[int]{value: 1},
 		},
 	}
 	for _, tt := range intTests {
@@ -179,28 +179,28 @@ func Test_tree_Min(t1 *testing.T) {
 func Test_tree_Max(t1 *testing.T) {
 	type testCase[V constraints.Ordered] struct {
 		name string
-		t    Tree[V]
-		want *Tree[V]
+		t    tree[V]
+		want *tree[V]
 	}
 	intTests := []testCase[int]{
 		{
 			name: "empty",
-			t:    Tree[int]{},
-			want: &Tree[int]{value: 0},
+			t:    tree[int]{},
+			want: &tree[int]{value: 0},
 		},
 		{
 			name: "one element",
-			t:    Tree[int]{value: 15},
-			want: &Tree[int]{value: 15},
+			t:    tree[int]{value: 15},
+			want: &tree[int]{value: 15},
 		},
 		{
 			name: "found max",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
-			want: &Tree[int]{value: 10},
+			want: &tree[int]{value: 10},
 		},
 	}
 	for _, tt := range intTests {
@@ -214,41 +214,41 @@ func Test_tree_Max(t1 *testing.T) {
 
 func Test_tree_preOrderSuccessor(t1 *testing.T) {
 	type args[V constraints.Ordered] struct {
-		el *Tree[V]
+		el *tree[V]
 	}
 	type testCase[V constraints.Ordered] struct {
 		name string
-		t    Tree[V]
+		t    tree[V]
 		args args[V]
-		want *Tree[V]
+		want *tree[V]
 	}
 
 	intTests := []testCase[int]{
 		{
 			name: "empty",
-			t:    Tree[int]{},
-			args: args[int]{el: &Tree[int]{value: 0}},
-			want: &Tree[int]{value: 0},
+			t:    tree[int]{},
+			args: args[int]{el: &tree[int]{value: 0}},
+			want: &tree[int]{value: 0},
 		},
 		{
 			name: "one element",
-			t:    Tree[int]{value: 15},
-			args: args[int]{el: &Tree[int]{value: 15}},
-			want: &Tree[int]{value: 0},
+			t:    tree[int]{value: 15},
+			args: args[int]{el: &tree[int]{value: 15}},
+			want: &tree[int]{value: 0},
 		},
 		{
 			name: "found preOrder",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
-			args: args[int]{el: &Tree[int]{
+			args: args[int]{el: &tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			}},
-			want: &Tree[int]{value: 1},
+			want: &tree[int]{value: 1},
 		},
 	}
 
@@ -263,40 +263,40 @@ func Test_tree_preOrderSuccessor(t1 *testing.T) {
 
 func Test_tree_postOrderSuccessor(t1 *testing.T) {
 	type args[V constraints.Ordered] struct {
-		el *Tree[V]
+		el *tree[V]
 	}
 	type testCase[V constraints.Ordered] struct {
 		name string
-		t    Tree[V]
+		t    tree[V]
 		args args[V]
-		want *Tree[V]
+		want *tree[V]
 	}
 	intTests := []testCase[int]{
 		{
 			name: "empty",
-			t:    Tree[int]{},
-			args: args[int]{el: &Tree[int]{value: 0}},
-			want: &Tree[int]{value: 0},
+			t:    tree[int]{},
+			args: args[int]{el: &tree[int]{value: 0}},
+			want: &tree[int]{value: 0},
 		},
 		{
 			name: "one element",
-			t:    Tree[int]{value: 15},
-			args: args[int]{el: &Tree[int]{value: 15}},
-			want: &Tree[int]{value: 0},
+			t:    tree[int]{value: 15},
+			args: args[int]{el: &tree[int]{value: 15}},
+			want: &tree[int]{value: 0},
 		},
 		{
 			name: "found postOrder",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
-			args: args[int]{el: &Tree[int]{
+			args: args[int]{el: &tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			}},
-			want: &Tree[int]{value: 10},
+			want: &tree[int]{value: 10},
 		},
 	}
 	for _, tt := range intTests {
@@ -314,26 +314,26 @@ func Test_tree_Insert(t1 *testing.T) {
 	}
 	type testCase[V constraints.Ordered] struct {
 		name string
-		t    Tree[V]
+		t    tree[V]
 		args args[V]
 	}
 	intTests := []testCase[int]{
 		{
 			name: "empty",
-			t:    Tree[int]{},
+			t:    tree[int]{},
 			args: args[int]{val: 0},
 		},
 		{
 			name: "one element",
-			t:    Tree[int]{value: 10},
+			t:    tree[int]{value: 10},
 			args: args[int]{val: 23},
 		},
 		{
 			name: "several elements",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 			args: args[int]{val: 23},
 		},
@@ -353,13 +353,13 @@ func TestCreateNode(t *testing.T) {
 	type testCase[V constraints.Ordered] struct {
 		name string
 		args args[V]
-		want *Tree[V]
+		want *tree[V]
 	}
 
 	testInt := testCase[int]{
 		name: "int node",
 		args: args[int]{val: 10},
-		want: &Tree[int]{value: 10},
+		want: &tree[int]{value: 10},
 	}
 	t.Run(testInt.name, func(t *testing.T) {
 		if got := CreateNode(testInt.args.val); !reflect.DeepEqual(got, testInt.want) {
@@ -370,7 +370,7 @@ func TestCreateNode(t *testing.T) {
 	testString := testCase[string]{
 		name: "string node",
 		args: args[string]{val: "test"},
-		want: &Tree[string]{value: "test"},
+		want: &tree[string]{value: "test"},
 	}
 	t.Run(testString.name, func(t *testing.T) {
 		if got := CreateNode(testString.args.val); !reflect.DeepEqual(got, testString.want) {
@@ -385,69 +385,69 @@ func TestTree_Parent(t1 *testing.T) {
 	}
 	type testCase[V constraints.Ordered] struct {
 		name string
-		t    Tree[V]
+		t    tree[V]
 		args args[V]
-		want *Tree[V]
+		want *tree[V]
 	}
 	intTests := []testCase[int]{
 		{
 			name: "empty tree",
-			t:    Tree[int]{},
+			t:    tree[int]{},
 			args: args[int]{val: 13},
 			want: nil,
 		},
 		{
 			name: "empty tree - arg 0",
-			t:    Tree[int]{},
+			t:    tree[int]{},
 			args: args[int]{val: 0},
 			want: nil,
 		},
 		{
 			name: "one element in tree",
-			t:    Tree[int]{value: 13},
+			t:    tree[int]{value: 13},
 			args: args[int]{val: 13},
 			want: nil,
 		},
 		{
 			name: "one element in tree - not found",
-			t:    Tree[int]{value: 13},
+			t:    tree[int]{value: 13},
 			args: args[int]{val: 1},
 			want: nil,
 		},
 		{
 			name: "found parent for left node",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 			args: args[int]{val: 1},
-			want: &Tree[int]{
+			want: &tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 		},
 		{
 			name: "found parent for right node",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 			args: args[int]{val: 10},
-			want: &Tree[int]{
+			want: &tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 		},
 		{
 			name: "not found parent",
-			t: Tree[int]{
+			t: tree[int]{
 				value: 5,
-				left:  &Tree[int]{value: 1},
-				right: &Tree[int]{value: 10},
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
 			},
 			args: args[int]{val: 8},
 			want: nil,
@@ -457,6 +457,154 @@ func TestTree_Parent(t1 *testing.T) {
 		t1.Run(tt.name, func(t1 *testing.T) {
 			if got := tt.t.Parent(tt.args.val); !reflect.DeepEqual(got, tt.want) {
 				t1.Errorf("Parent() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestTree_Delete(t1 *testing.T) {
+	type args[V constraints.Ordered] struct {
+		val V
+	}
+	type testCase[V constraints.Ordered] struct {
+		name    string
+		t       tree[V]
+		args    args[V]
+		wantErr bool
+		want    *tree[V]
+	}
+	intTests := []testCase[int]{
+		{
+			name:    "empty tree",
+			t:       tree[int]{},
+			args:    args[int]{val: 13},
+			wantErr: true,
+		},
+		{
+			name:    "not found for deleting",
+			t:       tree[int]{value: 1},
+			args:    args[int]{val: 13},
+			wantErr: true,
+		},
+		{
+			name:    "one element in tree",
+			t:       tree[int]{value: 1},
+			args:    args[int]{val: 1},
+			wantErr: false,
+			want:    nil,
+		},
+		{
+			name: "first case - left node without children",
+			t: tree[int]{
+				value: 5,
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
+			},
+			args:    args[int]{val: 1},
+			wantErr: false,
+			want: &tree[int]{
+				value: 5,
+				left:  nil,
+				right: &tree[int]{value: 10},
+			},
+		},
+		{
+			name: "first case - right node without children",
+			t: tree[int]{
+				value: 5,
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
+			},
+			args:    args[int]{val: 10},
+			wantErr: false,
+			want: &tree[int]{
+				value: 5,
+				left:  &tree[int]{value: 1},
+				right: nil,
+			},
+		},
+		{
+			name: "second case - left node with children",
+			t: tree[int]{
+				value: 5,
+				left:  &tree[int]{value: 2, left: &tree[int]{value: 1}},
+				right: &tree[int]{value: 10},
+			},
+			args:    args[int]{val: 2},
+			wantErr: false,
+			want: &tree[int]{
+				value: 5,
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{value: 10},
+			},
+		},
+		{
+			name: "root remove",
+			t: tree[int]{
+				value: 3,
+				right: &tree[int]{
+					value: 9,
+					left: &tree[int]{
+						value: 7,
+						right: &tree[int]{
+							value: 8,
+						},
+					},
+					right: &tree[int]{value: 10},
+				},
+			},
+			args:    args[int]{val: 3},
+			wantErr: false,
+			want: &tree[int]{
+				value: 9,
+				left: &tree[int]{
+					value: 7,
+					right: &tree[int]{
+						value: 8,
+					},
+				},
+				right: &tree[int]{value: 10},
+			},
+		},
+		{
+			name: "third case",
+			t: tree[int]{
+				value: 3,
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{
+					value: 9,
+					left: &tree[int]{
+						value: 7,
+						right: &tree[int]{
+							value: 8,
+						},
+					},
+					right: &tree[int]{value: 10},
+				},
+			},
+			args:    args[int]{val: 3},
+			wantErr: false,
+			want: &tree[int]{
+				value: 7,
+				left:  &tree[int]{value: 1},
+				right: &tree[int]{
+					value: 9,
+					left:  &tree[int]{value: 8},
+					right: &tree[int]{value: 10},
+				},
+			},
+		},
+	}
+	for _, tt := range intTests {
+		t1.Run(tt.name, func(t1 *testing.T) {
+			if err := tt.t.Delete(tt.args.val); (err != nil) != tt.wantErr {
+				t1.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if err := tt.t.Delete(tt.args.val); err == nil && !reflect.DeepEqual(tt.t, tt.want) &&
+				tt.name != "one element in tree" &&
+				tt.name != "root remove" {
+				t1.Errorf("Delete() = %v, want %v", tt.t, tt.want)
 			}
 		})
 	}
