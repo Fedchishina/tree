@@ -1,4 +1,4 @@
-// Package tree is a package for work with trees.
+// Package tree is a package for work with Binary trees.
 package tree
 
 import (
@@ -136,7 +136,7 @@ func (t *Tree[V]) PostOrderSuccessor(el *Tree[V]) *Tree[V] {
 }
 
 // Insert is a function for inserting element into tree
-//   - param should be `ordered type` (`int`, `string`, `float` etc)
+//   - param should be `ordered type` (`int`, `string`, `float` etc.)
 func (t *Tree[V]) Insert(val V) {
 	elem := Tree[V]{
 		value: val,
@@ -154,4 +154,30 @@ func (t *Tree[V]) Insert(val V) {
 			t.right.Insert(val)
 		}
 	}
+}
+
+// Parent is a function for founding parent for value
+//   - param should be `ordered type` (`int`, `string`, `float` etc.)
+//
+// if tree does not contain node with input val function returns nil
+func (t *Tree[V]) Parent(val V) *Tree[V] {
+	if t.left == nil && t.right == nil {
+		return nil
+	}
+
+	var parent *Tree[V]
+	for t != nil && val != t.value {
+		parent = t
+		if val < t.value {
+			t = t.left
+		} else {
+			t = t.right
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return parent
 }

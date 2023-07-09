@@ -119,6 +119,16 @@ func Test_tree_Search(t1 *testing.T) {
 				right: &Tree[int]{value: 10},
 			},
 		},
+		{
+			name: "not found",
+			t: Tree[int]{
+				value: 5,
+				left:  &Tree[int]{value: 1},
+				right: &Tree[int]{value: 10},
+			},
+			args: args[int]{val: 8},
+			want: nil,
+		},
 	}
 	for _, tt := range intTests {
 		t1.Run(tt.name, func(t1 *testing.T) {
@@ -367,4 +377,87 @@ func TestCreateNode(t *testing.T) {
 			t.Errorf("CreateNode() = %v, want %v", got, testString.want)
 		}
 	})
+}
+
+func TestTree_Parent(t1 *testing.T) {
+	type args[V constraints.Ordered] struct {
+		val V
+	}
+	type testCase[V constraints.Ordered] struct {
+		name string
+		t    Tree[V]
+		args args[V]
+		want *Tree[V]
+	}
+	intTests := []testCase[int]{
+		{
+			name: "empty tree",
+			t:    Tree[int]{},
+			args: args[int]{val: 13},
+			want: nil,
+		},
+		{
+			name: "empty tree - arg 0",
+			t:    Tree[int]{},
+			args: args[int]{val: 0},
+			want: nil,
+		},
+		{
+			name: "one element in tree",
+			t:    Tree[int]{value: 13},
+			args: args[int]{val: 13},
+			want: nil,
+		},
+		{
+			name: "one element in tree - not found",
+			t:    Tree[int]{value: 13},
+			args: args[int]{val: 1},
+			want: nil,
+		},
+		{
+			name: "found parent for left node",
+			t: Tree[int]{
+				value: 5,
+				left:  &Tree[int]{value: 1},
+				right: &Tree[int]{value: 10},
+			},
+			args: args[int]{val: 1},
+			want: &Tree[int]{
+				value: 5,
+				left:  &Tree[int]{value: 1},
+				right: &Tree[int]{value: 10},
+			},
+		},
+		{
+			name: "found parent for right node",
+			t: Tree[int]{
+				value: 5,
+				left:  &Tree[int]{value: 1},
+				right: &Tree[int]{value: 10},
+			},
+			args: args[int]{val: 10},
+			want: &Tree[int]{
+				value: 5,
+				left:  &Tree[int]{value: 1},
+				right: &Tree[int]{value: 10},
+			},
+		},
+		{
+			name: "not found parent",
+			t: Tree[int]{
+				value: 5,
+				left:  &Tree[int]{value: 1},
+				right: &Tree[int]{value: 10},
+			},
+			args: args[int]{val: 8},
+			want: nil,
+		},
+	}
+	for _, tt := range intTests {
+		t1.Run(tt.name, func(t1 *testing.T) {
+			if got := tt.t.Parent(tt.args.val); !reflect.DeepEqual(got, tt.want) {
+				t1.Errorf("Parent() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

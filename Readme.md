@@ -1,9 +1,9 @@
 Tree
 =======================
 
-Library for work with trees.
+Library for work with Binary trees.
 
-You can create a Tree and use a list of functions to work with it.
+You can create a Binary Tree and use a list of functions to work with it.
 
 - [Tree functions](#Tree-functions)
     * [Tree creation example](#Tree-creation-example)
@@ -13,34 +13,20 @@ You can create a Tree and use a list of functions to work with it.
     * [Max Tree element](#max-Tree-element)
     * [PreOrder Successor](#preorder-successor)
     * [PostOrder Successor](#postorder-successor)
+    * [Find parent](#find-parent)
 
 ## Tree functions
 ### Tree creation example
 
 ```
-intTree := Tree[int]{
-    value: 20,
-    left:  nil,
-    right: nil,
-}
-
-stringTree := Tree[string]{
-    value: "root value",
-    left:  nil,
-    right: nil,
-}
-
-t := tree.CreateNode(15)
+t := tree.CreateNode[int](15) //int node
+t := tree.CreateNode[string]("abc") //string node
 ```
 
 ### Tree traversal
 you can make Tree traversal:
 ```
-t := Tree[int]{
-    value: 20,
-    left:  nil,
-    right: nil,
-}
+t := tree.CreateNode[int](20)
 t.Insert(22)
 t.Insert(8)
 t.Insert(4)
@@ -52,11 +38,7 @@ resultDesc := t.InOrderTreeWalk(Desc) // [22 20 8 4]
 ### Search element
 
 ```
-t := Tree[int]{
-    value: 20,
-    left:  nil,
-    right: nil,
-}
+t := tree.CreateNode[int](20)
 t.Insert(22)
 t.Insert(8)
 t.Insert(4)
@@ -70,11 +52,7 @@ result := t.Search(12)    // Tree with root 12
 
 ### Min Tree element
 ```
-t := Tree[int]{
-    value: 20,
-    left:  nil,
-    right: nil,
-}
+t := tree.CreateNode[int](20)
 t.Insert(22)
 t.Insert(8)
 t.Insert(4)
@@ -86,11 +64,7 @@ result := t.Min() // Tree with root 4
 ```
 ### Max Tree element
 ```
-t := Tree[int]{
-    value: 20,
-    left:  nil,
-    right: nil,
-}
+t := tree.CreateNode[int](20)
 t.Insert(22)
 t.Insert(8)
 t.Insert(4)
@@ -103,11 +77,7 @@ result := t.Max() // Tree with root 22
 
 ### PreOrder Successor
 ```
-t := Tree[int]{
-    value: 20,
-    left:  nil,
-    right: nil,
-}
+t := tree.CreateNode[int](20)
 t.Insert(22)
 t.Insert(8)
 t.Insert(4)
@@ -120,11 +90,7 @@ result := t.PreOrderSuccessor(t.left) // Tree with root 4
 
 ### PostOrder Successor
 ```
-t := Tree[int]{
-    value: 20,
-    left:  nil,
-    right: nil,
-}
+t := tree.CreateNode[int](20)
 t.Insert(22)
 t.Insert(8)
 t.Insert(4)
@@ -133,4 +99,17 @@ t.Insert(10)
 t.Insert(14)
 
 result := t.PostOrderSuccessor(t.left) // Tree with root 10
+```
+
+### Find parent
+```
+t := tree.CreateNode[int](20)
+t.Insert(22)
+t.Insert(8)
+t.Insert(4)
+t.Insert(12)
+t.Insert(10)
+t.Insert(14)
+
+p := t.Parent(8) //20
 ```
