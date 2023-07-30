@@ -1,4 +1,4 @@
-node
+tree
 =======================
 
 Library for work with Binary trees.
