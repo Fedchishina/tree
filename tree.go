@@ -2,8 +2,6 @@
 package tree
 
 import (
-	"errors"
-
 	"golang.org/x/exp/constraints"
 )
 
@@ -17,244 +15,183 @@ const (
 // direction is a type which uses to set the direction (Asc or Desc).
 type direction string
 
-// tree is the structure of tree. You can use any ordered type for type of tree's values
-type tree[V constraints.Ordered] struct {
-	value V
-	left  *tree[V]
-	right *tree[V]
+type Tree[V constraints.Ordered] struct {
+	root *node[V]
 }
 
-// CreateNode is a function for creation tree with one node
+// New is a function for creation empty tree
 // - param should be `ordered type` (`int`, `string`, `float` etc)
-func CreateNode[V constraints.Ordered](val V) *tree[V] {
-	return &tree[V]{
-		value: val,
-		left:  nil,
-		right: nil,
+func New[V constraints.Ordered]() *Tree[V] {
+	return &Tree[V]{}
+}
+
+// NewWithElement is a function for creation tree with one element
+// - param should be `ordered type` (`int`, `string`, `float` etc)
+func NewWithElement[V constraints.Ordered](key V, value any) *Tree[V] {
+	return &Tree[V]{
+		root: &node[V]{
+			element: Element[V]{
+				key:   key,
+				value: value,
+			},
+		},
 	}
 }
 
-// InOrderTreeWalk is a function when you can make tree traversal.
-//   - param should be `type direction` (`direction.Asc` or `direction.Desc`)
-func (t *tree[V]) InOrderTreeWalk(d direction) []V {
-	if t == nil {
+// Insert is a function for inserting element into node
+// - param key should be `ordered type` (`int`, `string`, `float` etc.)
+// - param value can be any type
+func (t *Tree[V]) Insert(key V, value any) {
+	n := &node[V]{
+		element: Element[V]{
+			key:   key,
+			value: value,
+		},
+	}
+
+	if t.root == nil {
+		t.root = n
+		return
+	}
+
+	t.root.insertNode(n)
+}
+
+// Min is a function for searching min element in tree (by key).
+func (t *Tree[V]) Min() *Element[V] {
+	n := t.root
+	if n == nil {
 		return nil
 	}
 
-	left := t.left.InOrderTreeWalk(d)
-	right := t.right.InOrderTreeWalk(d)
-
-	output := make([]V, 0)
-
-	if d == Asc {
-		output = append(output, left...)
-	} else {
-		output = append(output, right...)
+	for n.left != nil {
+		n = n.left
 	}
 
-	output = append(output, t.value)
-
-	if d == Asc {
-		output = append(output, right...)
-	} else {
-		output = append(output, left...)
-	}
-
-	return output
+	return &n.element
 }
 
-// Search is a function for searching element in tree.
-//   - param should be `ordered type` (`int`, `string`, `float` etc)
-func (t *tree[V]) Search(val V) *tree[V] {
-	for t != nil && val != t.value {
-		if val < t.value {
-			t = t.left
-		} else {
-			t = t.right
-		}
-	}
-
-	return t
-}
-
-// Min is a function for searching min element in tree.
-func (t *tree[V]) Min() *tree[V] {
-	for t.left != nil {
-		t = t.left
-	}
-
-	return t
-}
-
-// Max is a function for searching max element in tree.
-func (t *tree[V]) Max() *tree[V] {
-	for t.right != nil {
-		t = t.right
-	}
-
-	return t
-}
-
-// PreOrderSuccessor is a function for searching preOrder element for income element of tree
-//   - param should be `type tree`
-func (t *tree[V]) PreOrderSuccessor(el *tree[V]) *tree[V] {
-	if el.left != nil {
-		return el.left.Max()
-	}
-
-	var r tree[V]
-	for t != nil {
-		if t.value > el.value {
-			t = t.left
-		} else if t.value < el.value {
-			r = *t
-			t = t.right
-		} else {
-			break
-		}
-	}
-	return &r
-}
-
-// PostOrderSuccessor is a function for searching postOrder element for income element of tree
-//   - param should be `type tree`
-func (t *tree[V]) PostOrderSuccessor(el *tree[V]) *tree[V] {
-	if el.right != nil {
-		return el.right.Min()
-	}
-
-	var r tree[V]
-	for t != nil {
-		if t.value < el.value {
-			t = t.right
-		} else if t.value > el.value {
-			r = *t
-			t = t.left
-		} else {
-			break
-		}
-	}
-	return &r
-}
-
-// Insert is a function for inserting element into tree
-//   - param should be `ordered type` (`int`, `string`, `float` etc.)
-func (t *tree[V]) Insert(val V) {
-	node := tree[V]{
-		value: val,
-	}
-
-	if node.value < t.value {
-		if t.left == nil {
-			t.left = &node
-		} else {
-			t.left.Insert(val)
-		}
-	} else {
-		if t.right == nil {
-			t.right = &node
-		} else {
-			t.right.Insert(val)
-		}
-	}
-}
-
-// Parent is a function for founding parent for value
-//   - param should be `ordered type` (`int`, `string`, `float` etc.)
-//
-// if tree does not contain node with input val function returns nil
-func (t *tree[V]) Parent(val V) *tree[V] {
-	if t.left == nil && t.right == nil {
+// Max is a function for searching max element in tree (by key).
+func (t *Tree[V]) Max() *Element[V] {
+	n := t.root
+	if n == nil {
 		return nil
 	}
 
-	var parent *tree[V]
-	for t != nil && val != t.value {
-		parent = t
-		if val < t.value {
-			t = t.left
-		} else {
-			t = t.right
-		}
+	for n.right != nil {
+		n = n.right
 	}
 
-	if t == nil {
-		return nil
-	}
-
-	return parent
+	return &n.element
 }
 
-// Delete is a function for deleting node in tree
-//   - param should be `ordered type` (`int`, `string`, `float` etc.)
-func (t *tree[V]) Delete(val V) error {
-	//tree with one node
-	if t.left == nil && t.right == nil && val == t.value {
-		t = nil
-
+// Search is a function for searching element in node.
+// - param key should be `ordered type` (`int`, `string`, `float` etc)
+func (t *Tree[V]) Search(key V) *Element[V] {
+	searchNode := search(t.root, key)
+	if searchNode == nil {
 		return nil
 	}
 
-	delNode := t.Search(val)
+	return &searchNode.element
+}
+
+// InOrderTreeWalk is a function for getting ordered array of tree's elements.
+// - param key should be `ordered type` (`int`, `string`, `float` etc)
+func (t *Tree[V]) InOrderTreeWalk(d direction) []Element[V] {
+	if t.root == nil {
+		return nil
+	}
+
+	return inOrderTreeWalk(t.root, d)
+}
+
+// PreOrderSuccessor is a function for searching preOrder element for income element (if we found it by input key param)
+// - param key should be `ordered type` (`int`, `string`, `float` etc)
+func (t *Tree[V]) PreOrderSuccessor(key V) *Element[V] {
+	searchNode := search(t.root, key)
+	if searchNode == nil || searchNode.parent == nil {
+		return nil
+	}
+
+	return &searchNode.parent.element
+}
+
+// PostOrderSuccessor is a function for searching postOrder element for income element (if we found it by input key param)
+// - param key should be `ordered type` (`int`, `string`, `float` etc)
+func (t *Tree[V]) PostOrderSuccessor(key V) *Element[V] {
+	searchNode := search(t.root, key)
+	if searchNode == nil || searchNode.right == nil {
+		return nil
+	}
+
+	return &searchNode.right.element
+}
+
+// Delete is a function for deleting node in node
+// - param key should be `ordered type` (`int`, `string`, `float` etc)
+func (t *Tree[V]) Delete(key V) {
+	if t.root != nil && t.root.element.key == key && t.root.left == nil && t.root.right == nil {
+		t.root = nil
+		return
+	}
+
+	delNode := search(t.root, key)
 	if delNode == nil {
-		return errors.New("node for deleting not found")
+		return
 	}
 
-	parent := t.Parent(val)
-
-	// first case
-	if delNode.left == nil && delNode.right == nil {
-		if parent.left.value == val {
-			parent.left = nil
-		} else {
-			parent.right = nil
+	// first case (node without children)
+	if delNode.element.key == key && delNode.left == nil && delNode.right == nil {
+		if delNode.parent.right.element.key == key {
+			delNode.parent.right = nil
+			return
 		}
 
-		return nil
+		delNode.parent.left = nil
+		return
 	}
 
 	// second case
-	if delNode.left == nil && delNode.right != nil {
-		if parent == nil {
-			t = delNode.right
-
-			return nil
-		}
-
-		if parent.left.value == val {
-			parent.left = delNode.right
-		} else {
-			parent.right = delNode.right
-		}
-
-		return nil
+	if delNode.left == nil && delNode.right != nil && delNode.parent == nil {
+		delNode.right.parent = nil
+		t.root = delNode.right
+		return
+	}
+	if delNode.left != nil && delNode.right == nil && delNode.parent == nil {
+		delNode.left.parent = nil
+		t.root = delNode.left
+		return
 	}
 
-	if delNode.left != nil && delNode.right == nil {
-		if parent == nil {
-			t = delNode.left
-
-			return nil
-		}
-		if parent.left.value == val {
-			parent.left = delNode.left
-		} else {
-			parent.right = delNode.left
+	if delNode.left == nil && delNode.right != nil && delNode.parent != nil {
+		delNode.right.parent = delNode.parent
+		if delNode.parent.right.element.key == key {
+			delNode.parent.right = delNode.right
+			return
 		}
 
-		return nil
+		delNode.parent.left = delNode.left
+		return
+	}
+
+	if delNode.left != nil && delNode.right == nil && delNode.parent != nil {
+		delNode.left.parent = delNode.parent
+		if delNode.parent.right.element.key == key {
+			delNode.parent.right = delNode.left
+			return
+		}
+
+		delNode.parent.left = delNode.left
+		return
 	}
 
 	//third case
-	min := delNode.right.Min()
-	minVal := min.value
-	err := t.Delete(min.value)
+	m := min(delNode.right)
+	minElement := m.element
+	t.Delete(m.element.key)
 
-	if err != nil {
-		return err
-	}
+	delNode.element = minElement
 
-	delNode.value = minVal
-
-	return nil
+	return
 }
