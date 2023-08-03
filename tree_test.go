@@ -179,7 +179,7 @@ func TestTree_Insert(t1 *testing.T) {
 		t1.Run(tt.name, func(t1 *testing.T) {
 			tt.t.Insert(tt.args.key, tt.args.value)
 			if !reflect.DeepEqual(tt.t, tt.want) {
-				t1.Errorf("Insert() = %v, want %v", tt.t, tt.want)
+				t1.Errorf("Insert() = %#+v, want %#+v", tt.t, tt.want)
 			}
 		})
 	}

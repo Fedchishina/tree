@@ -131,18 +131,18 @@ func (t *Tree[V]) PostOrderSuccessor(key V) *Element[V] {
 // Delete is a function for deleting node in node
 // - param key should be `ordered type` (`int`, `string`, `float` etc)
 func (t *Tree[V]) Delete(key V) {
-	if t.root != nil && t.root.element.key == key && t.root.left == nil && t.root.right == nil {
-		t.root = nil
-		return
-	}
-
 	delNode := search(t.root, key)
 	if delNode == nil {
 		return
 	}
 
+	if delNode == t.root && t.root.hasNoChildren() {
+		t.root = nil
+		return
+	}
+
 	// first case (node without children)
-	if delNode.element.key == key && delNode.left == nil && delNode.right == nil {
+	if delNode.element.key == key && delNode.hasNoChildren() {
 		if delNode.parent.right.element.key == key {
 			delNode.parent.right = nil
 			return
@@ -153,20 +153,15 @@ func (t *Tree[V]) Delete(key V) {
 	}
 
 	// second case
-	if delNode.left == nil && delNode.right != nil && delNode.parent == nil {
-		delNode.right.parent = nil
-		t.root = delNode.right
-		return
-	}
-	if delNode.left != nil && delNode.right == nil && delNode.parent == nil {
-		delNode.left.parent = nil
-		t.root = delNode.left
-		return
-	}
-
-	if delNode.left == nil && delNode.right != nil && delNode.parent != nil {
+	if delNode.left == nil && delNode.right != nil {
 		delNode.right.parent = delNode.parent
-		if delNode.parent.right.element.key == key {
+
+		if delNode == t.root {
+			t.root = t.root.right
+			return
+		}
+
+		if delNode.parent.right == delNode {
 			delNode.parent.right = delNode.right
 			return
 		}
@@ -175,9 +170,15 @@ func (t *Tree[V]) Delete(key V) {
 		return
 	}
 
-	if delNode.left != nil && delNode.right == nil && delNode.parent != nil {
+	if delNode.left != nil && delNode.right == nil {
 		delNode.left.parent = delNode.parent
-		if delNode.parent.right.element.key == key {
+
+		if delNode == t.root {
+			t.root = t.root.left
+			return
+		}
+
+		if delNode.parent.right == delNode {
 			delNode.parent.right = delNode.left
 			return
 		}
@@ -189,7 +190,14 @@ func (t *Tree[V]) Delete(key V) {
 	//third case
 	m := min(delNode.right)
 	minElement := m.element
-	t.Delete(m.element.key)
+
+	if m.parent == delNode {
+		m.parent.right = nil
+	} else {
+		m.parent.left = nil
+	}
+
+	m.parent = nil
 
 	delNode.element = minElement
 

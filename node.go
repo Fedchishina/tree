@@ -17,11 +17,14 @@ type node[V constraints.Ordered] struct {
 	right   *node[V]
 }
 
+func (n *node[V]) hasNoChildren() bool {
+	return n.left == nil && n.right == nil
+}
+
 func (n *node[V]) insertNode(newNode *node[V]) {
 	if newNode.element.key < n.element.key {
 		if n.left == nil {
-			n.left = newNode
-			newNode.parent = n
+			addLeaf[V](newNode, n, &n.left)
 			return
 		}
 		n.left.insertNode(newNode)
@@ -29,12 +32,16 @@ func (n *node[V]) insertNode(newNode *node[V]) {
 	}
 
 	if n.right == nil {
-		n.right = newNode
-		newNode.parent = n
+		addLeaf[V](newNode, n, &n.right)
 		return
 	}
 
 	n.right.insertNode(newNode)
+}
+
+func addLeaf[V constraints.Ordered](newNode, parentNode *node[V], nodePlace **node[V]) {
+	*nodePlace = newNode
+	newNode.parent = parentNode
 }
 
 func inOrderTreeWalk[V constraints.Ordered](n *node[V], d direction) []Element[V] {
