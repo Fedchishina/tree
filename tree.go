@@ -123,6 +123,40 @@ func (t *Tree[V]) InOrderTreeWalk(d direction) []V {
 	return inOrderTreeWalk(t.root, d)
 }
 
+// InOrderTreeWalkWithStack is a function for getting ordered array of tree's elements.
+// - param key should be `ordered type` (`int`, `string`, `float` etc)
+func (t *Tree[V]) InOrderTreeWalkWithStack(d direction) []V {
+	if t.root == nil {
+		return nil
+	}
+
+	var stack []*node[V]
+	var result []V
+	curr := t.root
+
+	for curr != nil || len(stack) > 0 {
+		for curr != nil {
+			stack = append(stack, curr)
+			if d == Asc {
+				curr = curr.left
+				continue
+			}
+			curr = curr.right
+		}
+
+		curr = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		result = append(result, curr.element.key)
+		if d == Asc {
+			curr = curr.right
+			continue
+		}
+		curr = curr.left
+	}
+
+	return result
+}
+
 // PreOrderSuccessor is a function for searching preOrder key for income element (if we found it by input key param)
 // - param key should be `ordered type` (`int`, `string`, `float` etc)
 func (t *Tree[V]) PreOrderSuccessor(key V) (V, error) {

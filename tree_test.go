@@ -842,3 +842,73 @@ func TestTree_GetValue(t1 *testing.T) {
 		})
 	}
 }
+
+func TestTree_InOrderTreeWalkWithStack(t1 *testing.T) {
+	type args struct {
+		d direction
+	}
+	type testCase[V constraints.Ordered] struct {
+		name string
+		t    Tree[V]
+		args args
+		want []V
+	}
+	treeWithOneElement := New[int]()
+	treeWithOneElement.Insert(15, 15)
+	treeWithOneElement.Insert(25, 25)
+
+	tests := []testCase[int]{
+		{
+			name: "empty tree",
+			t:    Tree[int]{root: nil},
+			args: args{d: Asc},
+			want: nil,
+		},
+		{
+			name: "tree with one element - asc",
+			t: Tree[int]{
+				root: &node[int]{
+					element: element[int]{
+						key:   15,
+						value: 15,
+					},
+				},
+			},
+			args: args{d: Asc},
+			want: []int{15},
+		},
+		{
+			name: "tree with one element - asc",
+			t: Tree[int]{
+				root: &node[int]{
+					element: element[int]{
+						key:   15,
+						value: 15,
+					},
+				},
+			},
+			args: args{d: Desc},
+			want: []int{15},
+		},
+		{
+			name: "tree with root and one element - asc",
+			t:    *treeWithOneElement,
+			args: args{d: Asc},
+			want: []int{15, 25},
+		},
+		{
+			name: "tree with root and one element - desc",
+			t:    *treeWithOneElement,
+			args: args{d: Desc},
+			want: []int{25, 15},
+		},
+	}
+
+	for _, tt := range tests {
+		t1.Run(tt.name, func(t1 *testing.T) {
+			if got := tt.t.InOrderTreeWalkWithStack(tt.args.d); !reflect.DeepEqual(got, tt.want) {
+				t1.Errorf("InOrderTreeWalkWithStack() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

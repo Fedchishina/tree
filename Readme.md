@@ -42,7 +42,7 @@ t.Insert(4, 4) // insert to tree element: key=4, value=4
 ```
 
 ### Tree traversal
-you can make tree traversal:
+you can make tree traversal by two methods:
 ```
 t := tree.New[int]()
 t.Insert(22, 22) 
@@ -51,6 +51,11 @@ t.Insert(4, 4)
 
 resultAsc := t.InOrderTreeWalk(tree.Asc)   // [4, 8, 22]
 resultDesc := t.InOrderTreeWalk(tree.Desc)   // [22, 8, 4]
+
+// or
+resultAsc := t.InOrderTreeWalkWithStack(tree.Asc)   // [4, 8, 22]
+resultDesc := t.InOrderTreeWalkWithStack(tree.Desc)   // [22, 8, 4]
+
 ```
 
 ### Exists element
