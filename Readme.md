@@ -10,7 +10,8 @@ You can create a Binary node and use a list of functions to work with it.
   - [Tree's creation with one element example](#trees-creation-with-one-element-example)
   - [Insert element to tree](#insert-element-to-tree)
   - [Tree traversal](#tree-traversal)
-  - [Search element](#search-element)
+  - [Exists element](#exists-element)
+  - [Get value by key element](#get-value-by-key-element)
   - [Min tree element](#min-tree-element)
   - [Max tree element](#max-tree-element)
   - [PreOrder Successor](#preorder-successor)
@@ -48,11 +49,11 @@ t.Insert(22, 22)
 t.Insert(8, 8)
 t.Insert(4, 4)
 
-resultAsc := t.InOrderTreeWalk(tree.Asc)   // [Element{4, 4}, Element{8, 8}, Element{22, 22}]
-resultDesc := t.InOrderTreeWalk(tree.Desc)   // [Element{22, 22}, Element{8, 8}, Element{4, 4}]
+resultAsc := t.InOrderTreeWalk(tree.Asc)   // [4, 8, 22]
+resultDesc := t.InOrderTreeWalk(tree.Desc)   // [22, 8, 4]
 ```
 
-### Search element
+### Exists element
 
 ```
 t := tree.New[int]()
@@ -60,8 +61,20 @@ t.Insert(22, 22)
 t.Insert(8, 8)
 t.Insert(4, 4)
 
-resultNil := t.Search(15) // nil
-result    := t.Search(8)  // Element {key:8, value: 8}
+resultNil := t.Exists(15) // false
+result    := t.Exists(8)  // true
+```
+
+### Get value by key element
+
+```
+t := tree.New[int]()
+t.Insert(22, 22) 
+t.Insert(8, 8)
+t.Insert(4, 4)
+
+resultNil, err := t.GetValue(15) // nil, err
+result, err    := t.GetValue(8)  // 8, nil
 ```
 
 ### Min tree element
@@ -71,7 +84,7 @@ t.Insert(22, 22)
 t.Insert(8, 8)
 t.Insert(4, 4)
 
-result := t.Min() // Element {key:4, value: 4}
+result := t.Min() // 4
 ```
 ### Max tree element
 ```
@@ -80,18 +93,19 @@ t.Insert(22, 22)
 t.Insert(8, 8)
 t.Insert(4, 4)
 
-result := t.Max() // Element {key:22, value: 22}
+result := t.Max() // 22
 ```
 
 ### PreOrder Successor
+
 ```
 t := tree.New[int]()
 t.Insert(22, 22) 
 t.Insert(8, 8)
 t.Insert(4, 4)
 
-resultNil := t.PreOrderSuccessor(22) // nil
-result    := t.PreOrderSuccessor(8)  // Element {key:22, value: 22}
+resultNil, err := t.PreOrderSuccessor(22) // nil, err
+result, err    := t.PreOrderSuccessor(8)  // 22, nil
 ```
 
 ### PostOrder Successor
@@ -101,8 +115,8 @@ t.Insert(22, 22)
 t.Insert(8, 8)
 t.Insert(4, 4)
 
-resultNil := t.PostOrderSuccessor(4) // nil
-result    := t.PostOrderSuccessor(8)  // Element {key:4, value: 4}
+resultNil, err := t.PostOrderSuccessor(4) // nil, err
+result, err    := t.PostOrderSuccessor(8)  // 4, nil
 ```
 
 ### Delete element by key from tree

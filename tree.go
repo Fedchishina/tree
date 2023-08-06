@@ -2,6 +2,9 @@
 package tree
 
 import (
+	"errors"
+	"fmt"
+
 	"golang.org/x/exp/constraints"
 )
 
@@ -30,7 +33,7 @@ func New[V constraints.Ordered]() *Tree[V] {
 func NewWithElement[V constraints.Ordered](key V, value any) *Tree[V] {
 	return &Tree[V]{
 		root: &node[V]{
-			element: Element[V]{
+			element: element[V]{
 				key:   key,
 				value: value,
 			},
@@ -43,7 +46,7 @@ func NewWithElement[V constraints.Ordered](key V, value any) *Tree[V] {
 // - param value can be any type
 func (t *Tree[V]) Insert(key V, value any) {
 	n := &node[V]{
-		element: Element[V]{
+		element: element[V]{
 			key:   key,
 			value: value,
 		},
@@ -58,47 +61,61 @@ func (t *Tree[V]) Insert(key V, value any) {
 }
 
 // Min is a function for searching min element in tree (by key).
-func (t *Tree[V]) Min() *Element[V] {
+func (t *Tree[V]) Min() V {
+	var result V
 	n := t.root
 	if n == nil {
-		return nil
+		return result
 	}
 
 	for n.left != nil {
 		n = n.left
 	}
 
-	return &n.element
+	return n.element.key
 }
 
 // Max is a function for searching max element in tree (by key).
-func (t *Tree[V]) Max() *Element[V] {
+func (t *Tree[V]) Max() V {
+	var result V
 	n := t.root
 	if n == nil {
-		return nil
+		return result
 	}
 
 	for n.right != nil {
 		n = n.right
 	}
 
-	return &n.element
+	return n.element.key
 }
 
-// Search is a function for searching element in node.
+// Exists is a function for searching element in node. If element exists in tree- return true, else - false
 // - param key should be `ordered type` (`int`, `string`, `float` etc)
-func (t *Tree[V]) Search(key V) *Element[V] {
+func (t *Tree[V]) Exists(key V) bool {
 	searchNode := search(t.root, key)
 	if searchNode == nil {
-		return nil
+		return false
 	}
 
-	return &searchNode.element
+	return true
+}
+
+// GetValue is a function for searching element in node and returning value of this element
+// - param key should be `ordered type` (`int`, `string`, `float` etc)
+func (t *Tree[V]) GetValue(key V) (any, error) {
+	var result any
+	searchNode := search(t.root, key)
+	if searchNode == nil {
+		return result, errors.New(fmt.Sprintf("element with key %v not found", key))
+	}
+
+	return searchNode.element.value, nil
 }
 
 // InOrderTreeWalk is a function for getting ordered array of tree's elements.
 // - param key should be `ordered type` (`int`, `string`, `float` etc)
-func (t *Tree[V]) InOrderTreeWalk(d direction) []Element[V] {
+func (t *Tree[V]) InOrderTreeWalk(d direction) []V {
 	if t.root == nil {
 		return nil
 	}
@@ -106,26 +123,28 @@ func (t *Tree[V]) InOrderTreeWalk(d direction) []Element[V] {
 	return inOrderTreeWalk(t.root, d)
 }
 
-// PreOrderSuccessor is a function for searching preOrder element for income element (if we found it by input key param)
+// PreOrderSuccessor is a function for searching preOrder key for income element (if we found it by input key param)
 // - param key should be `ordered type` (`int`, `string`, `float` etc)
-func (t *Tree[V]) PreOrderSuccessor(key V) *Element[V] {
+func (t *Tree[V]) PreOrderSuccessor(key V) (V, error) {
+	var result V
 	searchNode := search(t.root, key)
 	if searchNode == nil || searchNode.parent == nil {
-		return nil
+		return result, errors.New(fmt.Sprintf("PreOrderSuccessor for key %v not found", key))
 	}
 
-	return &searchNode.parent.element
+	return searchNode.parent.element.key, nil
 }
 
-// PostOrderSuccessor is a function for searching postOrder element for income element (if we found it by input key param)
+// PostOrderSuccessor is a function for searching postOrder key for income element (if we found it by input key param)
 // - param key should be `ordered type` (`int`, `string`, `float` etc)
-func (t *Tree[V]) PostOrderSuccessor(key V) *Element[V] {
+func (t *Tree[V]) PostOrderSuccessor(key V) (V, error) {
+	var result V
 	searchNode := search(t.root, key)
 	if searchNode == nil || searchNode.right == nil {
-		return nil
+		return result, errors.New(fmt.Sprintf("postOrderSuccessor for key %v not found", key))
 	}
 
-	return &searchNode.right.element
+	return searchNode.right.element.key, nil
 }
 
 // Delete is a function for deleting node in node

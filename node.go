@@ -2,7 +2,7 @@ package tree
 
 import "golang.org/x/exp/constraints"
 
-type Element[V constraints.Ordered] struct {
+type element[V constraints.Ordered] struct {
 	key   V
 	value any
 }
@@ -11,7 +11,7 @@ type Element[V constraints.Ordered] struct {
 // node's key is any ordered type for type of
 // node's value has type any
 type node[V constraints.Ordered] struct {
-	element Element[V]
+	element element[V]
 	parent  *node[V]
 	left    *node[V]
 	right   *node[V]
@@ -44,20 +44,20 @@ func addLeaf[V constraints.Ordered](newNode, parentNode *node[V], nodePlace **no
 	newNode.parent = parentNode
 }
 
-func inOrderTreeWalk[V constraints.Ordered](n *node[V], d direction) []Element[V] {
+func inOrderTreeWalk[V constraints.Ordered](n *node[V], d direction) []V {
 	if n == nil {
-		return []Element[V]{}
+		return []V{}
 	}
 
 	left := inOrderTreeWalk(n.left, d)
 	right := inOrderTreeWalk(n.right, d)
 
-	output := make([]Element[V], 0)
+	output := make([]V, 0)
 	if d == Asc {
-		return append(output, append(append(left, n.element), right...)...)
+		return append(output, append(append(left, n.element.key), right...)...)
 	}
 
-	return append(output, append(append(right, n.element), left...)...)
+	return append(output, append(append(right, n.element.key), left...)...)
 }
 
 func search[V constraints.Ordered](n *node[V], key V) *node[V] {
