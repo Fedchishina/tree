@@ -39,6 +39,9 @@ t := tree.New[int]() // empty int tree
 t.Insert(22, 22) // insert to tree element: key=22, value=22
 t.Insert(8, 8) // insert to tree element: key=8, value=8
 t.Insert(4, 4) // insert to tree element: key=4, value=4
+
+// or
+t.InsertWithoutRecursion(4, 4) // insert to tree element: key=4, value=4
 ```
 
 ### Tree traversal

@@ -60,6 +60,40 @@ func (t *Tree[V]) Insert(key V, value any) {
 	t.root.insertNode(n)
 }
 
+// InsertWithoutRecursion is a function for inserting element into node
+// - param key should be `ordered type` (`int`, `string`, `float` etc.)
+// - param value can be any type
+func (t *Tree[V]) InsertWithoutRecursion(key V, value any) {
+	newNode := &node[V]{element: element[V]{
+		key:   key,
+		value: value,
+	}}
+
+	if t.root == nil {
+		t.root = newNode
+		return
+	}
+
+	current := t.root
+	for {
+		if key < current.element.key {
+			if current.left == nil {
+				current.left = newNode
+				newNode.parent = current
+				return
+			}
+			current = current.left
+		}
+
+		if current.right == nil {
+			current.right = newNode
+			newNode.parent = current
+			return
+		}
+		current = current.right
+	}
+}
+
 // Min is a function for searching min element in tree (by key).
 func (t *Tree[V]) Min() V {
 	var result V

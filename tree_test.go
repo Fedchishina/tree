@@ -147,6 +147,74 @@ func TestTree_Insert(t1 *testing.T) {
 	}
 }
 
+func TestTree_WithoutRecursion(t1 *testing.T) {
+	type args[V constraints.Ordered] struct {
+		key   V
+		value any
+	}
+	type testCase[V constraints.Ordered] struct {
+		name string
+		t    Tree[V]
+		args args[V]
+		want Tree[V]
+	}
+
+	treeWithOneElement := New[int]()
+	treeWithOneElement.Insert(15, 15)
+	treeWithOneElement.Insert(25, 25)
+
+	treeWithTwoElements := New[int]()
+	treeWithTwoElements.Insert(15, 15)
+	treeWithTwoElements.Insert(25, 25)
+	treeWithTwoElements.Insert(35, 35)
+
+	tests := []testCase[int]{
+		{
+			name: "empty tree",
+			t:    Tree[int]{},
+			args: args[int]{key: 15, value: 15},
+			want: Tree[int]{
+				root: &node[int]{
+					element: element[int]{
+						key:   15,
+						value: 15,
+					},
+					parent: nil,
+					left:   nil,
+					right:  nil,
+				},
+			},
+		},
+		{
+			name: "tree with root and one element",
+			t: Tree[int]{
+				root: &node[int]{
+					element: element[int]{
+						key:   15,
+						value: 15,
+					},
+				},
+			},
+			args: args[int]{key: 25, value: 25},
+			want: *treeWithOneElement,
+		},
+		{
+			name: "tree with root and two elements",
+			t:    *treeWithOneElement,
+			args: args[int]{key: 35, value: 35},
+			want: *treeWithTwoElements,
+		},
+	}
+	for _, tt := range tests {
+		t1.Run(tt.name, func(t1 *testing.T) {
+			tt.t.InsertWithoutRecursion(tt.args.key, tt.args.value)
+			if !reflect.DeepEqual(tt.t, tt.want) {
+				t1.Errorf("InsertWithoutRecursion() = %#+v, want %#+v", tt.t, tt.want)
+			}
+		})
+	}
+}
+
 func TestTree_Min(t1 *testing.T) {
 	type testCase[V constraints.Ordered] struct {
 		name string
